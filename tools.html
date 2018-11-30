@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tools</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="./layui/css/layui.css">
+  <style>
+    .footer{padding: 30px 0; line-height: 30px; text-align: center; color: #666; font-weight: 300;}
+    .footer a{padding: 0 5px;}
+  </style>
+</head>
+<body>
+
+<div class="layui-container">
+  <div class="layui-tab">
+    <ul class="layui-tab-title">
+      <li class="layui-this">Hash计算</li>
+      <li>Base 编解码</li>
+      <li>敬请期待</li>
+      <li>敬请期待</li>
+      <li>敬请期待</li>
+    </ul>
+    <div class="layui-tab-content">
+      <div class="layui-tab-item layui-show">
+        <!-- hash html start -->
+        <form class="layui-form" action="">
+          <fieldset class="layui-elem-field" style="margin-top: 30px;padding: 30px;">
+            <legend>Hash计算</legend>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">输入数据</label>
+              <div class="layui-input-block">
+                <textarea id="hashInputText" placeholder="请输入数据" class="layui-textarea" onkeyup="calcHash()"></textarea>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <div class="layui-inline">
+                <label class="layui-form-label">输入格式</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="hashInputType" value="1" title="HEX" checked=""
+                         lay-filter="hashInputTypeFilter">
+                  <input type="radio" name="hashInputType" value="2" title="UTF-8" lay-filter="hashInputTypeFilter">
+                </div>
+              </div>
+              <div class="layui-inline">
+                <div class="layui-input-block">
+                  <button id="hashBtn" type="button" class="layui-btn" lay-submit="">Hash计算</button>
+                  <button type="reset" class="layui-btn layui-btn-primary">清空</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">输入的HEX</label>
+              <div class="layui-input-block">
+                <input id="hashInputHexValue" placeholder="输入的HEX" readonly="true" value="" class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">MD5</label>
+              <div class="layui-input-block">
+                <input id="hashOutputMd5" placeholder="MD5结果" readonly="true" value="" class="layui-input"></input>
+              </div>
+            </div>
+  
+            <div class="layui-form-item">
+              <label class="layui-form-label">RIPEMD160</label>
+              <div class="layui-input-block">
+                <input id="hashOutputRipemd160" placeholder="RIPEMD160结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA1</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha1" placeholder="SHA1结果" readonly="true" value="" class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA224</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha224" placeholder="SHA224结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA256</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha256" placeholder="SHA256结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+  
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA384</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha384" placeholder="SHA384结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+  
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA512</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha512" placeholder="SHA512结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+  
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA3_224</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha3_224" placeholder="SHA3_224结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+  
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA3_256</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha3_256" placeholder="SHA3_256结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA3_384</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha3_384" placeholder="SHA3_384结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <label class="layui-form-label">SHA3_512</label>
+              <div class="layui-input-block">
+                <input id="hashOutputSha3_512" placeholder="SHA3_512结果" readonly="true" value=""
+                       class="layui-input"></input>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <!-- hash html end -->
+      </div>
+      
+      <div class="layui-tab-item">
+        <!-- base 编解码 html start -->
+        <form class="layui-form" action="">
+          <fieldset class="layui-elem-field" style="margin-top: 30px;padding: 30px;">
+            <legend>Base 编解码</legend>
+            
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">输入数据</label>
+              <div class="layui-input-block">
+                <textarea id="baseInputText" placeholder="请输入数据" class="layui-textarea"></textarea>
+              </div>
+            </div>
+            
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <div class="layui-inline">
+                  <div class="layui-btn-group">
+                    <button id="baseEncodeHexBtn" type="button" class="layui-btn" lay-submit="">对HEX编码</button>
+                    <button id="baseEncodeUtf8Btn" type="button" class="layui-btn" lay-submit="">对Utf8编码</button>
+                  </div>
+                </div>
+  
+                <div class="layui-inline">
+                  <div class="layui-btn-group">
+                    <button id="baseDecodeToHexBtn" type="button" class="layui-btn layui-btn-normal" lay-submit="">解码为HEX</button>
+                    <button id="baseDecodeToUtf8Btn" type="button" class="layui-btn layui-btn-normal" lay-submit="">解码为Utf8</button>
+                  </div>
+                </div>
+  
+                <div class="layui-inline">
+                  <button type="reset" class="layui-btn layui-btn-primary">清空</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">输入的HEX</label>
+              <div class="layui-input-block">
+                <input id="baseInputHexValue" placeholder="输入的HEX" readonly="true" value="" class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">Base64</label>
+              <div class="layui-input-block">
+                <input id="base64Output" placeholder="Base64结果" readonly="true" value="" class="layui-input"></input>
+              </div>
+            </div>
+            
+            <div class="layui-form-item layui-form-text">
+              <label class="layui-form-label">Base58</label>
+              <div class="layui-input-block">
+                <input id="base58Output" placeholder="Base58结果" readonly="true" value="" class="layui-input"></input>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <!-- base 编解码 html end -->
+      
+      </div>
+      <div class="layui-tab-item">
+        <!-- 内容3 -->
+      </div>
+      <div class="layui-tab-item">
+        <!-- 内容4 -->
+      </div>
+      <div class="layui-tab-item">
+        <!-- 内容5 -->
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<div class="layui-footer footer footer-index">
+  <div class="layui-main">
+    <p>
+      © 2018 <a href="/">itlgl.com</a>
+      <a href="https://github.com/itlgl/tools/" target="_blank" rel="nofollow">GitHub</a>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Library：
+      <a href="https://www.layui.com/" target="_blank">Layui</a>
+      <a href="https://github.com/brix/crypto-js" target="_blank">CryptoJS</a>
+      <a href="https://github.com/45678/Base58" target="_blank">Base58</a>
+    </p>
+  </div>
+</div>
+
+<script src="./layui/layui.all.js"></script>
+<script src="./script/jquery-3.3.1.min.js"></script>
+<!-- CryptoJs https://github.com/brix/crypto-js -->
+<script src="./script/crypto-js-3.1.9-1.js"></script>
+<!-- https://github.com/45678/Base58 -->
+<script src="./script/Base58_github_45678.js" charset="utf-8"></script>
+<script src="./script/tools.js"></script>
+
+</body>
+</html>
