@@ -53,7 +53,7 @@ function calcHash() {
   valueHex = CryptoJS.enc.Hex.parse(valueHexStr);
   console.log("valueHex=" + valueHexStr);
   $("#hashInputHexValue").val(valueHexStr);
-  if(inputType === '1' && hashInput !== valueHexStr) {
+  if(inputType === '1' && hashInput.toLowerCase() !== valueHexStr) {
     layui.layer.msg('输入的hex值不合法，查看\"输入的HEX\"来查看实际解析值');
   }
 
@@ -207,7 +207,7 @@ function baseEncodeHex() {
     var valueHex = CryptoJS.enc.Hex.parse(valueHexStr);
     console.log("valueHex=" + valueHexStr);
     $("#baseInputHexValue").val(valueHexStr);
-    if(input !== valueHexStr) {
+    if(input.toLowerCase() !== valueHexStr) {
       layui.layer.msg('输入的hex值不合法，查看\"输入的HEX\"来查看实际解析值');
     }
 
