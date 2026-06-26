@@ -19,6 +19,8 @@ body {
 }
 
 button,
+input,
+select,
 textarea,
 output {
   font: inherit;
@@ -115,6 +117,10 @@ h2 {
   background: #e8eef7;
 }
 
+.tab-button:hover {
+  text-decoration: none;
+}
+
 .tool-panel {
   padding: 28px;
   border: 1px solid #dce2ea;
@@ -166,7 +172,29 @@ textarea {
   line-height: 1.55;
 }
 
-textarea:focus {
+input,
+select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #0f172a;
+  background: #fbfdff;
+  outline: none;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  color: #94a3b8;
+  background: #eef2f7;
+  cursor: not-allowed;
+}
+
+textarea:focus,
+input:focus,
+select:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.14);
 }
@@ -184,6 +212,7 @@ textarea:focus {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
   min-height: 44px;
   border: 1px solid #cbd5e1;
   border-radius: 8px;
@@ -222,6 +251,159 @@ textarea:focus {
   flex-wrap: wrap;
   gap: 10px;
   margin: 18px 0;
+}
+
+.aes-tool {
+  display: grid;
+  gap: 16px;
+}
+
+.aes-operation-row {
+  grid-template-columns: 1fr 1fr;
+}
+
+.aes-operation-row legend {
+  grid-column: 1 / -1;
+}
+
+.aes-inline-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  max-width: 760px;
+}
+
+.inline-field {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  align-items: center;
+  min-width: 0;
+  border: 1px solid #dce2ea;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.inline-field > span {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  padding: 0 13px;
+  color: #334155;
+  background: #f3f6fa;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.inline-field select,
+.inline-field input,
+.readonly-field output {
+  min-height: 42px;
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.readonly-field output {
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.secret-line {
+  display: grid;
+  gap: 10px;
+}
+
+.secret-group {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.secret-combo {
+  display: grid;
+  grid-template-columns: 76px 132px minmax(0, 1fr) 112px;
+  min-width: 0;
+  border: 1px solid #dce2ea;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.secret-label,
+.secret-combo output {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.secret-label {
+  padding: 0 14px;
+  color: #334155;
+  background: #f3f6fa;
+  font-size: 14px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+
+.secret-combo select,
+.secret-combo input,
+.secret-combo output {
+  min-height: 42px;
+  border: 0;
+  border-left: 1px solid #dce2ea;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.secret-combo output {
+  padding: 0 12px;
+  color: #111827;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.secret-combo.invalid output {
+  color: #b91c1c;
+}
+
+.field-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.aes-input-block,
+.aes-result-block {
+  gap: 8px;
+}
+
+.aes-textarea {
+  min-height: 150px;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 13px;
+}
+
+.aes-run-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.aes-run-row .primary-button {
+  min-width: 148px;
+}
+
+.aes-result-textarea {
+  min-height: 132px;
+}
+
+textarea.error {
+  color: #b91c1c;
 }
 
 .primary-button {
@@ -367,6 +549,33 @@ output.error {
 
   .segmented {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .aes-inline-row,
+  .secret-line {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-field {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .secret-combo {
+    grid-template-columns: 64px minmax(88px, 112px) minmax(0, 1fr);
+  }
+
+  .secret-combo output {
+    grid-column: 1 / -1;
+    border-top: 1px solid #dce2ea;
+    border-left: 0;
+  }
+
+  .aes-run-row .primary-button {
+    width: 100%;
+  }
+
+  .aes-textarea {
+    min-height: 180px;
   }
 
   .result-row {
