@@ -2,11 +2,16 @@
 import { reactive } from 'vue'
 import { Binary, Braces, Clipboard, FileCode2, RotateCcw } from '@lucide/vue'
 import { decodeToHex, decodeToUtf8, encodeFromHex, encodeFromUtf8 } from '../lib/codec'
+import { formatFileReadMessage, getDroppedFile, readFileForInput } from '../lib/fileInput'
 
 const emit = defineEmits(['copy'])
 
 const baseForm = reactive({
   input: '',
+  fileMode: 'hex',
+  fileDrag: false,
+  fileMessage: '',
+  fileError: '',
   result: {
     inputHex: '',
     warning: '',
@@ -30,6 +35,10 @@ function setBaseResult(action) {
 
 function clearBase() {
   baseForm.input = ''
+  baseForm.fileMode = 'hex'
+  baseForm.fileDrag = false
+  baseForm.fileMessage = ''
+  baseForm.fileError = ''
   baseForm.result = {
     inputHex: '',
     warning: '',
@@ -41,6 +50,25 @@ function clearBase() {
 
 function copyValue(value, key) {
   emit('copy', value, key)
+}
+
+async function loadDroppedFile(event) {
+  baseForm.fileDrag = false
+  baseForm.fileMessage = ''
+  baseForm.fileError = ''
+
+  const file = getDroppedFile(event)
+
+  if (!file) {
+    return
+  }
+
+  try {
+    baseForm.input = await readFileForInput(file, baseForm.fileMode)
+    baseForm.fileMessage = formatFileReadMessage(file, baseForm.fileMode)
+  } catch (error) {
+    baseForm.fileError = error.message || String(error)
+  }
 }
 </script>
 
@@ -57,10 +85,36 @@ function copyValue(value, key) {
       </button>
     </div>
 
+    <div class="controls-row">
+      <label class="inline-field short-inline-field">
+        <span>文件读取</span>
+        <select v-model="baseForm.fileMode">
+          <option value="hex">HEX</option>
+          <option value="utf8">UTF-8</option>
+          <option value="base64">Base64</option>
+        </select>
+      </label>
+    </div>
+
     <label class="field">
       <span>输入数据</span>
-      <textarea v-model="baseForm.input" placeholder="请输入数据" spellcheck="false" />
+      <textarea
+        v-model="baseForm.input"
+        class="droppable-textarea"
+        :class="{ dragging: baseForm.fileDrag }"
+        placeholder="请输入数据"
+        spellcheck="false"
+        @dragenter.prevent="baseForm.fileDrag = true"
+        @dragover.prevent="baseForm.fileDrag = true"
+        @dragleave.prevent="baseForm.fileDrag = false"
+        @drop.prevent="loadDroppedFile"
+      />
     </label>
+
+    <div v-if="baseForm.fileMessage" class="notice soft-notice" role="status">
+      {{ baseForm.fileMessage }}
+    </div>
+    <p v-if="baseForm.fileError" class="field-error" role="alert">{{ baseForm.fileError }}</p>
 
     <div class="action-bar" aria-label="Base 操作">
       <button

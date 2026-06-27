@@ -2,12 +2,16 @@
 import { computed, reactive } from 'vue'
 import { Clipboard, Eraser } from '@lucide/vue'
 import { calculateHashes } from '../lib/codec'
+import { formatFileReadMessage, getDroppedFile, readFileForInput } from '../lib/fileInput'
 
 const emit = defineEmits(['copy'])
 
 const hashForm = reactive({
   input: '',
   inputType: 'hex',
+  fileDrag: false,
+  fileMessage: '',
+  fileError: '',
 })
 
 const hashResult = computed(() => calculateHashes(hashForm.input, hashForm.inputType))
@@ -15,10 +19,34 @@ const hashResult = computed(() => calculateHashes(hashForm.input, hashForm.input
 function clearHash() {
   hashForm.input = ''
   hashForm.inputType = 'hex'
+  hashForm.fileDrag = false
+  hashForm.fileMessage = ''
+  hashForm.fileError = ''
 }
 
 function copyValue(value, key) {
   emit('copy', value, key)
+}
+
+async function loadDroppedFile(event) {
+  hashForm.fileDrag = false
+  hashForm.fileMessage = ''
+  hashForm.fileError = ''
+
+  const file = getDroppedFile(event)
+
+  if (!file) {
+    return
+  }
+
+  const mode = hashForm.inputType === 'hex' ? 'hex' : 'utf8'
+
+  try {
+    hashForm.input = await readFileForInput(file, mode)
+    hashForm.fileMessage = formatFileReadMessage(file, mode)
+  } catch (error) {
+    hashForm.fileError = error.message || String(error)
+  }
 }
 </script>
 
@@ -38,7 +66,17 @@ function copyValue(value, key) {
     <div class="form-grid">
       <label class="field field-wide">
         <span>输入数据</span>
-        <textarea v-model="hashForm.input" placeholder="请输入数据" spellcheck="false" />
+        <textarea
+          v-model="hashForm.input"
+          class="droppable-textarea"
+          :class="{ dragging: hashForm.fileDrag }"
+          placeholder="请输入数据"
+          spellcheck="false"
+          @dragenter.prevent="hashForm.fileDrag = true"
+          @dragover.prevent="hashForm.fileDrag = true"
+          @dragleave.prevent="hashForm.fileDrag = false"
+          @drop.prevent="loadDroppedFile"
+        />
       </label>
 
       <fieldset class="segmented">
@@ -56,6 +94,10 @@ function copyValue(value, key) {
       <div v-if="hashResult.warning" class="notice" role="status">
         {{ hashResult.warning }}
       </div>
+      <div v-if="hashForm.fileMessage" class="notice soft-notice" role="status">
+        {{ hashForm.fileMessage }}
+      </div>
+      <p v-if="hashForm.fileError" class="field-error" role="alert">{{ hashForm.fileError }}</p>
     </div>
 
     <div class="result-list">

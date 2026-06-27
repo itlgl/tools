@@ -2,6 +2,7 @@
 import { computed, reactive, watch } from 'vue'
 import { LockKeyhole, LockKeyholeOpen, RotateCcw } from '@lucide/vue'
 import { AES_KEY_BITS, AES_PADDINGS, decryptAes, encryptAes, inspectAesValue } from '../lib/aes'
+import { formatFileReadMessage, getDroppedFile, readFileForInput } from '../lib/fileInput'
 
 const aesModeOptions = [
   { value: 'CBC', label: 'CBC - 链式分组，常用' },
@@ -21,6 +22,9 @@ const aesForm = reactive({
   operation: 'encrypt',
   input: '',
   inputType: 'utf8',
+  fileDrag: false,
+  fileMessage: '',
+  fileError: '',
   outputType: 'base64',
   key: '',
   keyType: 'utf8',
@@ -169,6 +173,9 @@ function clearAes() {
   aesForm.operation = 'encrypt'
   aesForm.input = ''
   aesForm.inputType = 'utf8'
+  aesForm.fileDrag = false
+  aesForm.fileMessage = ''
+  aesForm.fileError = ''
   aesForm.outputType = 'base64'
   aesForm.key = ''
   aesForm.keyType = 'utf8'
@@ -182,6 +189,29 @@ function clearAes() {
 }
 
 watch(() => aesForm.operation, normalizeAesFormats)
+
+async function loadDroppedFile(event) {
+  aesForm.fileDrag = false
+  aesForm.fileMessage = ''
+  aesForm.fileError = ''
+  aesForm.result = emptyAesResult()
+  aesForm.lastAction = ''
+
+  const file = getDroppedFile(event)
+
+  if (!file) {
+    return
+  }
+
+  const mode = aesForm.inputType === 'hex' ? 'hex' : 'utf8'
+
+  try {
+    aesForm.input = await readFileForInput(file, mode)
+    aesForm.fileMessage = formatFileReadMessage(file, mode)
+  } catch (error) {
+    aesForm.fileError = error.message || String(error)
+  }
+}
 </script>
 
 <template>
@@ -291,16 +321,30 @@ watch(() => aesForm.operation, normalizeAesFormats)
         <textarea
           v-model="aesForm.input"
           class="aes-textarea"
+          :class="{ 'droppable-textarea': true, dragging: aesForm.fileDrag }"
           :placeholder="aesForm.operation === 'encrypt' ? '请输入明文' : '请输入密文'"
           spellcheck="false"
+          @dragenter.prevent="aesForm.fileDrag = true"
+          @dragover.prevent="aesForm.fileDrag = true"
+          @dragleave.prevent="aesForm.fileDrag = false"
+          @drop.prevent="loadDroppedFile"
         />
       </label>
+
+      <div v-if="aesForm.fileMessage" class="notice soft-notice" role="status">
+        {{ aesForm.fileMessage }}
+      </div>
+      <p v-if="aesForm.fileError" class="field-error" role="alert">{{ aesForm.fileError }}</p>
 
       <div class="aes-run-row">
         <button class="primary-button" type="button" :class="{ active: aesForm.lastAction === aesForm.operation }" @click="runAes">
           <component :is="aesForm.operation === 'encrypt' ? LockKeyhole : LockKeyholeOpen" :size="17" aria-hidden="true" />
           <span>{{ aesForm.operation === 'encrypt' ? '加密' : '解密' }}</span>
         </button>
+      </div>
+
+      <div v-if="aesForm.result.warning" class="notice" role="status">
+        {{ aesForm.result.warning }}
       </div>
 
       <label class="field field-wide aes-result-block">

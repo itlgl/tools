@@ -1,20 +1,41 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { Binary, Hash, LockKeyhole } from '@lucide/vue'
+import { Binary, Braces, Clock, FingerprintPattern, Hash, KeyRound, Link, LockKeyhole, QrCode, Rows3 } from '@lucide/vue'
 import AesTool from './tools/AesTool.vue'
 import Base64Tool from './tools/Base64Tool.vue'
 import HashTool from './tools/HashTool.vue'
+import HexViewerTool from './tools/HexViewerTool.vue'
+import JsonTool from './tools/JsonTool.vue'
+import PasswordTool from './tools/PasswordTool.vue'
+import QrTool from './tools/QrTool.vue'
+import TimestampTool from './tools/TimestampTool.vue'
+import UrlTool from './tools/UrlTool.vue'
+import UuidTool from './tools/UuidTool.vue'
 
 const tabs = [
   { id: 'hash', label: 'Hash 计算', icon: Hash, href: '/tools/hash' },
   { id: 'base64', label: 'Base 编解码', icon: Binary, href: '/tools/base64' },
   { id: 'aes', label: 'AES 加解密', icon: LockKeyhole, href: '/tools/aes' },
+  { id: 'url', label: 'URL 工具', icon: Link, href: '/tools/url' },
+  { id: 'timestamp', label: '时间戳转换', icon: Clock, href: '/tools/timestamp' },
+  { id: 'uuid', label: 'UUID 生成', icon: FingerprintPattern, href: '/tools/uuid' },
+  { id: 'json', label: 'JSON 格式化', icon: Braces, href: '/tools/json' },
+  { id: 'password', label: '密码生成', icon: KeyRound, href: '/tools/password' },
+  { id: 'hex', label: 'HEX 查看器', icon: Rows3, href: '/tools/hex' },
+  { id: 'qr', label: '二维码', icon: QrCode, href: '/tools/qr' },
 ]
 
 const toolComponents = {
   hash: HashTool,
   base64: Base64Tool,
   aes: AesTool,
+  url: UrlTool,
+  timestamp: TimestampTool,
+  uuid: UuidTool,
+  json: JsonTool,
+  password: PasswordTool,
+  hex: HexViewerTool,
+  qr: QrTool,
 }
 
 const pathToolMap = {
@@ -22,10 +43,21 @@ const pathToolMap = {
   base64: 'base64',
   base: 'base64',
   aes: 'aes',
+  url: 'url',
+  time: 'timestamp',
+  timestamp: 'timestamp',
+  uuid: 'uuid',
+  json: 'json',
+  password: 'password',
+  pwd: 'password',
+  hex: 'hex',
+  qr: 'qr',
+  qrcode: 'qr',
 }
 
 const currentPath = ref(window.location.pathname)
 const copiedKey = ref('')
+const copyMessage = ref('')
 
 const activeTab = computed(() => {
   const pathParts = currentPath.value.split('/').filter(Boolean)
@@ -67,11 +99,18 @@ async function copyValue(value, key) {
     return
   }
 
-  await navigator.clipboard.writeText(value)
+  try {
+    await navigator.clipboard.writeText(value)
+    copyMessage.value = '已复制'
+  } catch {
+    copyMessage.value = '复制失败'
+  }
+
   copiedKey.value = key
   window.setTimeout(() => {
     if (copiedKey.value === key) {
       copiedKey.value = ''
+      copyMessage.value = ''
     }
   }, 1200)
 }
@@ -83,6 +122,7 @@ async function copyValue(value, key) {
       <div>
         <p class="eyebrow">ITLGL Tools</p>
         <h1>编码与摘要工具</h1>
+        <p class="privacy-note">隐私提示：所有计算均在本地浏览器完成，输入内容不会上传到服务器。</p>
       </div>
       <nav class="tabs" aria-label="工具类型">
         <a
@@ -103,7 +143,7 @@ async function copyValue(value, key) {
       <component :is="activeTool" @copy="copyValue" />
     </KeepAlive>
 
-    <p v-if="copiedKey" class="toast" role="status">已复制</p>
+    <p v-if="copiedKey" class="toast" role="status">{{ copyMessage }}</p>
 
     <footer class="footer">
       <span>© 2026 itlgl.com</span>
