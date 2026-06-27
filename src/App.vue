@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { Binary, Braces, Clock, FingerprintPattern, Hash, KeyRound, Link, LockKeyhole, QrCode, Rows3 } from '@lucide/vue'
 import AesTool from './tools/AesTool.vue'
 import Base64Tool from './tools/Base64Tool.vue'
@@ -58,6 +58,7 @@ const pathToolMap = {
 const currentPath = ref(window.location.pathname)
 const copiedKey = ref('')
 const copyMessage = ref('')
+const appTitle = '开发者工具箱'
 
 const activeTab = computed(() => {
   const pathParts = currentPath.value.split('/').filter(Boolean)
@@ -67,6 +68,15 @@ const activeTab = computed(() => {
 })
 
 const activeTool = computed(() => toolComponents[activeTab.value] || HashTool)
+const activeTabInfo = computed(() => tabs.find((tab) => tab.id === activeTab.value) || tabs[0])
+
+watch(
+  activeTabInfo,
+  (tab) => {
+    document.title = `${tab.label}-${appTitle}`
+  },
+  { immediate: true },
+)
 
 function syncPath() {
   currentPath.value = window.location.pathname
@@ -121,7 +131,7 @@ async function copyValue(value, key) {
     <header class="topbar">
       <div>
         <p class="eyebrow">ITLGL Tools</p>
-        <h1>编码与摘要工具</h1>
+        <h1>开发者工具箱</h1>
         <p class="privacy-note">隐私提示：所有计算均在本地浏览器完成，输入内容不会上传到服务器。</p>
       </div>
       <nav class="tabs" aria-label="工具类型">
