@@ -411,6 +411,152 @@ select:focus {
   width: min(100%, 260px);
 }
 
+.diff-controls {
+  justify-content: space-between;
+}
+
+.diff-mode-selector {
+  grid-template-columns: repeat(2, minmax(112px, 1fr));
+  width: min(100%, 280px);
+}
+
+.diff-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  border: 1px solid #dce2ea;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #334155;
+  background: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.diff-toggle input {
+  width: 16px;
+  min-height: 16px;
+  margin: 0;
+}
+
+.diff-input-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.diff-textarea {
+  min-height: 260px;
+}
+
+.diff-identical {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0;
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.diff-viewer {
+  overflow: auto;
+  border: 1px solid #dce2ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.diff-head,
+.diff-row {
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 42px minmax(300px, 1fr);
+  min-width: 760px;
+}
+
+.diff-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  color: #334155;
+  background: #f3f6fa;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.diff-head span {
+  padding: 10px 12px;
+}
+
+.diff-row {
+  border-top: 1px solid #e2e8f0;
+}
+
+.diff-line {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  min-width: 0;
+}
+
+.diff-line + .diff-line {
+  border-left: 1px solid #e2e8f0;
+}
+
+.diff-line-number {
+  padding: 8px 10px;
+  color: #94a3b8;
+  background: rgba(241, 245, 249, 0.75);
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  text-align: right;
+  user-select: none;
+}
+
+.diff-line code {
+  min-width: 0;
+  padding: 8px 10px;
+  overflow-wrap: anywhere;
+  color: #111827;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.diff-marker {
+  display: grid;
+  place-items: center;
+  border-right: 1px solid #e2e8f0;
+  border-left: 1px solid #e2e8f0;
+  color: #64748b;
+  background: #f8fafc;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.diff-add .diff-marker,
+.diff-add .diff-line:last-child {
+  color: #166534;
+  background: #ecfdf5;
+}
+
+.diff-remove .diff-marker,
+.diff-remove .diff-line:first-child {
+  color: #991b1b;
+  background: #fef2f2;
+}
+
+.diff-change .diff-marker,
+.diff-change .diff-line {
+  color: #854d0e;
+  background: #fffbeb;
+}
+
 .self-start {
   justify-self: start;
 }
@@ -921,6 +1067,7 @@ output.error {
   }
 
   .aes-inline-row,
+  .diff-input-grid,
   .secret-line,
   .two-column-tool,
   .option-grid,
@@ -940,6 +1087,12 @@ output.error {
   }
 
   .short-inline-field {
+    width: 100%;
+  }
+
+  .diff-mode-selector,
+  .diff-toggle,
+  .diff-controls .ghost-button {
     width: 100%;
   }
 

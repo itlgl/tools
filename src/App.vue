@@ -1,8 +1,9 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { Binary, Braces, Clock, FingerprintPattern, Hash, KeyRound, Link, LockKeyhole, QrCode, Rows3 } from '@lucide/vue'
+import { Binary, Braces, Clock, FileDiff, FingerprintPattern, Hash, KeyRound, Link, LockKeyhole, QrCode, Rows3 } from '@lucide/vue'
 import AesTool from './tools/AesTool.vue'
 import Base64Tool from './tools/Base64Tool.vue'
+import DiffTool from './tools/DiffTool.vue'
 import HashTool from './tools/HashTool.vue'
 import HexViewerTool from './tools/HexViewerTool.vue'
 import JsonTool from './tools/JsonTool.vue'
@@ -20,6 +21,7 @@ const tabs = [
   { id: 'timestamp', label: '时间戳转换', icon: Clock, href: '/tools/timestamp' },
   { id: 'uuid', label: 'UUID 生成', icon: FingerprintPattern, href: '/tools/uuid' },
   { id: 'json', label: 'JSON 格式化', icon: Braces, href: '/tools/json' },
+  { id: 'diff', label: '文本 / JSON Diff', icon: FileDiff, href: '/tools/diff' },
   { id: 'password', label: '密码生成', icon: KeyRound, href: '/tools/password' },
   { id: 'hex', label: 'HEX 查看器', icon: Rows3, href: '/tools/hex' },
   { id: 'qr', label: '二维码', icon: QrCode, href: '/tools/qr' },
@@ -33,6 +35,7 @@ const toolComponents = {
   timestamp: TimestampTool,
   uuid: UuidTool,
   json: JsonTool,
+  diff: DiffTool,
   password: PasswordTool,
   hex: HexViewerTool,
   qr: QrTool,
@@ -48,6 +51,8 @@ const pathToolMap = {
   timestamp: 'timestamp',
   uuid: 'uuid',
   json: 'json',
+  diff: 'diff',
+  compare: 'diff',
   password: 'password',
   pwd: 'password',
   hex: 'hex',
