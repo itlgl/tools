@@ -411,6 +411,53 @@ select:focus {
   width: min(100%, 260px);
 }
 
+.unicode-scope-field {
+  width: min(100%, 340px);
+}
+
+.unicode-action-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.unicode-table {
+  overflow-x: auto;
+  border: 1px solid #dce2ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.unicode-head,
+.unicode-row {
+  display: grid;
+  grid-template-columns: 64px 110px 150px 170px minmax(180px, 1fr) minmax(140px, 180px);
+  min-width: 860px;
+}
+
+.unicode-head {
+  color: #334155;
+  background: #f3f6fa;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.unicode-head span {
+  padding: 10px 12px;
+}
+
+.unicode-row {
+  border-top: 1px solid #dce2ea;
+}
+
+.unicode-row output {
+  border-right: 1px solid #dce2ea;
+}
+
+.unicode-row output:last-child {
+  border-right: 0;
+}
+
 .diff-controls {
   justify-content: space-between;
 }
@@ -1087,6 +1134,14 @@ output.error {
   }
 
   .short-inline-field {
+    width: 100%;
+  }
+
+  .unicode-action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .unicode-scope-field {
     width: 100%;
   }
 
